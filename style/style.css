@@ -1,0 +1,15 @@
+body{
+    display: flex;
+    justify-content: center;
+
+}
+#start-button {
+    margin-top: 50px;
+   
+}
+#canvas {
+    border: 1px solid black;
+    margin-top: 50px;
+    
+    display: none;
+}
