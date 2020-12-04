@@ -2,14 +2,16 @@ window.onload = function () {
   document.getElementById("start-button").onclick = function () {
     startGame();
   };
+  //criar o pre-game para carregar o background, as placas e limpar o botao
+  // ajustar o starGame para carregar os jogadores, placares e controller
 
   function startGame() {
     gameArea.start();
     background.draw();
     gameArea.clearButton();
-    leftPlayer.drawIdle();
+    leftPlayer.draw();
     leftPlayer.drawScore();
-    rightPlayer.drawIdle();
+    rightPlayer.draw();
     rightPlayer.drawScore();
   }
 
@@ -21,6 +23,7 @@ window.onload = function () {
       this.interval = setInterval(updateGameArea, 20);
       this.canvas.width = 800;
       this.canvas.height = 600;
+      this.controller = false;
     },
     clear: function () {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -37,6 +40,11 @@ window.onload = function () {
       this.canvas.style.display = "none";
       button.style.display = "block";
     },
+
+    stop: function (){
+      clearInterval(this.interval);
+    }
+
   };
 
   function updateGameArea() {
@@ -46,7 +54,25 @@ window.onload = function () {
     rightPlayer.draw();
     leftPlayer.drawScore();
     rightPlayer.drawScore();
-    //não esqueça de criar o gameOver quando lives for = 0
+    checkIsGameOver();
+  }
+
+  function restartGame() {
+    setTimeout(function () {
+      gameArea.controller = false;
+      leftPlayer.state = 'idle';
+      rightPlayer.state = 'idle';
+    }, 3000);
+    setTimeout(function () {
+      //nomedaplaca.draw()
+       //nextround
+    },2000)
+
+  }
+  function checkIsGameOver(){
+    if (leftPlayer.lives === 0 || rightPlayer.lives === 0){
+      gameArea.stop();
+    }
   }
 
   class Background {
@@ -62,6 +88,29 @@ window.onload = function () {
   }
   const background = new Background("../images/bg.png");
   
+  class boards {
+    constructor(theDuel, chooseGuns, instructions, shot, nextRound){
+      this.startBoard = new Image ();
+      this.startBoard.src = theDuel;
+      this.gunsBoard = new Image ();
+      this.gunsBoard.src = chooseGuns;
+      this.instructionsBoard = new Image();
+      this.instructionsBoard.src = instructions;
+      this.nextBoard = new Image ();
+      this.nextBoard.src = nextRound;
+      this.boardShot = new Image ();
+      this.boardShot.src = shot;
+      this.x = x;
+      this.y = y;
+      this.state = 'theDuel';
+
+    }
+    //terminar as placas
+    drawBoads (){
+
+    }
+
+  }
   
   class Player {
     constructor(idle, shooting, loose, x, y) {
@@ -123,23 +172,24 @@ window.onload = function () {
     521
   );
 
-  let controller = false;
-  document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", (e) => {
     //left player
-    if (e.keyCode === 65 && !controller) {
-      controller = true;
+    if (e.keyCode === 65 && !gameArea.controller) {
+      gameArea.controller = true;
       leftPlayer.state = 'shooting';
       rightPlayer.state = 'loose';
       rightPlayer.lives -= 1;
+      restartGame();
     }
     // right player
-    if (e.keyCode === 76 && !controller) {
-      controller = true;
+    if (e.keyCode === 76 && !gameArea.controller) {
+      gameArea.controller = true;
       rightPlayer.state = 'shooting';
       leftPlayer.state = 'loose';
       leftPlayer.lives -= 1;
+      restartGame();
     }
-    controller = false;
+    
   })
 
 
