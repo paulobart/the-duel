@@ -2,29 +2,42 @@ window.onload = function () {
   document.getElementById("start-button").onclick = function () {
     startGame();
   };
-  //criar o pre-game para carregar o background, as placas e limpar o botao
-  // ajustar o starGame para carregar os jogadores, placares e controller
-
+  
   function startGame() {
-    gameArea.start();
-    background.draw();
     gameArea.clearButton();
-    leftPlayer.draw();
-    leftPlayer.drawScore();
-    rightPlayer.draw();
-    rightPlayer.drawScore();
+    gameArea.start();
   }
+
+  function preGame() {
+    gameArea.clear();
+    background.draw();
+    board.drawBoards();
+    bgAudioStart();
+  }
+  // const criar uma varivel de controle e mudar no if das imagens o draw do fake ou real
+  const bgAudio = new Audio();
+  bgAudio.src = "../audio/bg-audio2.mp3";
+  bgAudio.volume = 0.1;
+
+  const shotSound = new Audio();
+  shotSound.src = "../audio/shot.mp3";
+  shotSound.volume = 0.1;
+
+
 
   const gameArea = {
     canvas: document.querySelector("#canvas"),
-
     start: function () {
       this.context = this.canvas.getContext("2d");
-      this.interval = setInterval(updateGameArea, 20);
       this.canvas.width = 800;
       this.canvas.height = 600;
-      this.controller = false;
     },
+
+    startDuel: function (){
+      this.interval = setInterval(updateGameArea, 20);
+      this.controller = false;
+    },  
+
     clear: function () {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
@@ -41,15 +54,37 @@ window.onload = function () {
       button.style.display = "block";
     },
 
-    stop: function (){
+    stop: function () {
       clearInterval(this.interval);
-    }
-
+      setTimeout(gameOver(), 1000);
+    },
+    
   };
+
+  function bgAudioStart() {
+    bgAudio.play();
+  }
+
+  function shotSoundPlay() {
+    shotSound.play();
+  }
+
+  function gameOver () {
+    gameArea.clear();
+    background.draw();
+    leftPlayer.draw();
+    rightPlayer.draw();
+    gameArea.context.textAlign = 'center';
+    gameArea.context.fillStyle = '#705246';
+    gameArea.context.font = 'bold 50px Arcade';
+    gameArea.context.fillText('GAME OVER', gameArea.canvas.width/2, gameArea.canvas.height/2);
+  }
+
 
   function updateGameArea() {
     gameArea.clear();
     background.draw();
+    //displayTexts();
     leftPlayer.draw();
     rightPlayer.draw();
     leftPlayer.drawScore();
@@ -60,17 +95,48 @@ window.onload = function () {
   function restartGame() {
     setTimeout(function () {
       gameArea.controller = false;
-      leftPlayer.state = 'idle';
-      rightPlayer.state = 'idle';
-    }, 3000);
-    //setTimeout(function () {
-      //nomedaplaca.draw()
-       //nextround
-    //},2000)
-
+      leftPlayer.state = "idle";
+      rightPlayer.state = "idle";
+    }, 2000);
+    setTimeout (function () {
+      gameArea.context.textAlign = 'center';
+      gameArea.context.fillStyle = '#705246';
+      gameArea.context.font = 'bold 60px Arcade';
+      gameArea.context.fillText('Next Round', gameArea.canvas.width/2, 301);
+    }, 1000);
   }
-  function checkIsGameOver(){
-    if (leftPlayer.lives === 0 || rightPlayer.lives === 0){
+     
+  function displayTexts(){
+    setTimeout (function () {
+      gameArea.context.textAlign = 'center';
+      gameArea.context.fillStyle = '#705246';
+      gameArea.context.font = 'bold 50px Arcade';
+      gameArea.context.fillText('READY', gameArea.canvas.width/2, 240);
+    }, 1000);
+
+    setTimeout (function () {
+      gameArea.context.textAlign = 'center';
+      gameArea.context.fillStyle = '#705246';
+      gameArea.context.font = 'bold 60px Arcade';
+      gameArea.context.fillText('STEADY', gameArea.canvas.width/2, 301);
+    },3000);
+
+    setTimeout (function () {
+      gameArea.context.textAlign = 'center';
+      gameArea.context.fillStyle = '#705246';
+      gameArea.context.font = 'bold 70px Arcade';
+      gameArea.context.fillText('GO', gameArea.canvas.width/2, 361);
+    }, 5000);  
+  }
+
+  function checkIsGameOver() {
+    if (leftPlayer.lives === 0) {
+      leftPlayer.state = 'defeated'
+      rightPlayer.state = 'winner';
+      gameArea.stop();
+    } else if(rightPlayer.lives === 0){
+      rightPlayer.state = 'defeated'
+      leftPlayer.state = 'winner'
       gameArea.stop();
     }
   }
@@ -87,58 +153,82 @@ window.onload = function () {
     }
   }
   const background = new Background("../images/bg.png");
-  
-  class Boards {
-    constructor(theDuel, chooseGuns, instructions, instructions2, shot, x, y){
-      this.startBoard = new Image ();
+
+  class Board {
+    constructor(theDuel, chooseGuns, instructions, instructions2, shoot, x, y) {
+      this.startBoard = new Image();
       this.startBoard.src = theDuel;
-      this.gunsBoard = new Image ();
+      this.gunsBoard = new Image();
       this.gunsBoard.src = chooseGuns;
       this.instructionsBoard = new Image();
       this.instructionsBoard.src = instructions;
-      this.whichtKey = new Image ();
-      this.whichtKey.src = instructions2;
-      this.boardShot = new Image ();
-      this.boardShot.src = shot;
+      this.whichKey = new Image();
+      this.whichKey.src = instructions2;
+      this.stampShoot = new Image();
+      this.stampShoot.src = shoot;
       this.x = x;
       this.y = y;
-      this.state = 'theDuel';
-
+      this.state = "theDuel";
     }
-    //terminar as placas
-    drawBoads (){
-        if (this.state === 'theDuel') {
-          gameArea.context.drawImage(this.startBoard, this.x, this.y);
-        } else if (this.state === 'chooseGuns'){
-          gameArea.context.drawImage(this.gunsBoard, this.x, this.y);
-        } else if (this.state === 'instructions'){
-          gameArea.context.drawImage(this.instructionsBoard, this.x, this.y);
-        } else {
-          gameArea.context.drawImage(this.instructions2, this.x, this.y);
-        }
+
+    drawBoards() {
+      if (this.state === "theDuel") {
+        gameArea.context.drawImage(this.startBoard, this.x, this.y);
+      } else if (this.state === "chooseGuns") {
+        gameArea.context.drawImage(this.gunsBoard, this.x, this.y);
+      } else if (this.state === "instructions") {
+        gameArea.context.drawImage(this.instructionsBoard, this.x, this.y);
+      } else {
+        gameArea.context.drawImage(this.whichKey, this.x, this.y);
       }
     }
-    const boards = new Boards(
-      "../images/theDuel.png",
-      "../images/chooseGuns.png",
-      "../images/instructions.png",
-      "../images/instructions2.png",
-      376,
-      490
-    );
-  
+  }
+  const board = new Board(
+    "../images/the-duel.png",
+    "../images/choose-guns.png",
+    "../images/instructions.png",
+    "../images/instructions2.png",
+    "../images/shoot-stamp.png",
+    225,
+    43
+  );
+
+  document.addEventListener("click", () => {
+    if (board.state === "theDuel"){
+        preGame();   
+        board.state = 'chooseGuns'
+       } else if (board.state === 'chooseGuns'){
+         preGame();
+         board.state = 'instructions'
+       } else if (board.state === 'instructions'){
+        preGame();
+        board.state = 'instructions2'
+      } else if (board.state === 'instructions2'){
+        preGame();
+        board.state = 'start duel'
+      } else if( board.state === 'start duel'){
+        board.state = '';
+        gameArea.startDuel();
+      }
+      
+  });
+
   class Player {
-    constructor(idle, shooting, loose, x, y) {
+    constructor(idle, shooting, loose, winner, defeated, x, y) {
       this.imgIdle = new Image();
       this.imgIdle.src = idle;
       this.imgShooting = new Image();
       this.imgShooting.src = shooting;
       this.imgLoose = new Image();
       this.imgLoose.src = loose;
+      this.imgWinner = new Image();
+      this.imgWinner.src = winner;
+      this.imgDefeated = new Image();
+      this.imgDefeated.src = defeated;
       this.x = x;
       this.y = y;
       this.lives = 3;
-      this.state = 'idle';
+      this.state = "idle";
       this.fullLife = new Image();
       this.fullLife.src = "../images/left-three.png";
       this.halflife = new Image();
@@ -147,18 +237,47 @@ window.onload = function () {
       this.lifeleft.src = "../images/left-one.png";
       this.nolife = new Image();
       this.nolife.src = "../images/left-zero.png";
-             
     }
-    draw() {
-      if (this.state === 'idle') {
-        gameArea.context.drawImage(this.imgIdle, this.x, this.y - this.imgIdle.height);
-      } else if (this.state === 'shooting'){
-        gameArea.context.drawImage(this.imgShooting, this.x, this.y - this.imgShooting.height);
-      } else {
-        gameArea.context.drawImage(this.imgLoose, this.x, this.y - this.imgLoose.height);
-      }
+    
 
+    draw() {
+      if (this.state === "idle") {
+        gameArea.context.drawImage(
+          this.imgIdle,
+          this.x,
+          this.y - this.imgIdle.height
+        );
+
+      } else if (this.state === "shooting") {
+        gameArea.context.drawImage(
+          this.imgShooting,
+          this.x,
+          this.y - this.imgShooting.height
+        );
+
+      } else if (this.state === "loose") {
+        gameArea.context.drawImage(
+          this.imgLoose,
+          this.x,
+          this.y - this.imgLoose.height
+        );
+      
+      } else if (this.state === "winner") {
+        gameArea.context.drawImage(
+          this.imgWinner,
+          this.x,
+          this.y - this.imgWinner.height
+        );  
+
+      }  else {
+          gameArea.context.drawImage(
+            this.imgDefeated,
+            this.x,
+            this.y - this.imgDefeated.height
+          );
+        }  
     }
+    
 
     drawScore() {
       if (this.lives === 3) {
@@ -172,10 +291,15 @@ window.onload = function () {
       }
     }
   }
+
+ 
+
   const leftPlayer = new Player(
     "../images/idle-left.png",
     "../images/shooting-left.png",
     "../images/lost-left.png",
+    "../images/winner-left.png",
+    "../images/defeated-left.png",
     47,
     521
   );
@@ -183,29 +307,31 @@ window.onload = function () {
     "../images/idle-right.png",
     "../images/shooting-right.png",
     "../images/lost-right.png",
+    "../images/winner-right.png",
+    "../images/defeated-right.png",
     590,
     521
   );
 
-    document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", (e) => {
     //left player
     if (e.keyCode === 65 && !gameArea.controller) {
       gameArea.controller = true;
-      leftPlayer.state = 'shooting';
-      rightPlayer.state = 'loose';
+      shotSoundPlay();
+      leftPlayer.state = "shooting";
+      rightPlayer.state = "loose";
       rightPlayer.lives -= 1;
       restartGame();
     }
     // right player
     if (e.keyCode === 76 && !gameArea.controller) {
       gameArea.controller = true;
-      rightPlayer.state = 'shooting';
-      leftPlayer.state = 'loose';
+      shotSoundPlay();
+      rightPlayer.state = "shooting";
+      leftPlayer.state = "loose";
       leftPlayer.lives -= 1;
       restartGame();
     }
     
-  })
-
-
+  });
 };

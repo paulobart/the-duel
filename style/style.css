@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "CFWildWestPERSONAL-Regular";
+    src: url("../fonts/CFWildWestPERSONAL-Regular.ttf");
+  }
+
 body{
     display: flex;
     justify-content: center;
