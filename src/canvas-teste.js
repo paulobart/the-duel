@@ -26,6 +26,7 @@ window.onload = function () {
   const gameArea = {
     showtext: false,
     realGuns: false,
+    restartControl: false,
     canvas: document.querySelector("#canvas"),
 
     start: function () {
@@ -59,7 +60,7 @@ window.onload = function () {
 
     stop: function () {
       clearInterval(this.interval);
-      setTimeout(gameOver(), 1000);
+      setTimeout(gameOver(), 2000);
     },
   };
 
@@ -83,24 +84,24 @@ window.onload = function () {
     gameArea.context.fillText(
       "GAME OVER",
       gameArea.canvas.width / 2,
-      gameArea.canvas.height / 2
+      gameArea.canvas.height / 2  
     );
+    //controle passa o restartcontrol para true
   }
 
   function updateGameArea() {
     gameArea.clear();
+    checkWhoIsWinner();
     background.draw();
     leftPlayer.draw();
     rightPlayer.draw();
     leftPlayer.drawScore();
     rightPlayer.drawScore();
-    checkIsGameOver();
     text.drawText();
   }
 
   function restartGame() {
     setTimeout(function () {
-      //gameArea.controller = true;
       leftPlayer.state = "idle";
       rightPlayer.state = "idle";
     }, 3000);
@@ -159,16 +160,29 @@ window.onload = function () {
   }
   const text = new Text();
 
-  function checkIsGameOver() {
+  function checkWhoIsWinner() {
     if (leftPlayer.lives === 0) {
       leftPlayer.state = "loose";
       rightPlayer.state = "liveWinner";
-      gameArea.stop();
+      checkIsGameOver();
     } else if (rightPlayer.lives === 0) {
       rightPlayer.state = "loose";
       leftPlayer.state = "liveWinner";
-      gameArea.stop();
+      console.log(leftPlayer)
+      checkIsGameOver();
     }
+  }
+
+  function checkIsGameOver() {
+    setTimeout(() => {
+      if (leftPlayer.state === 'loose') {
+        leftPlayer.state = "rip";
+        gameArea.stop();
+      } else if (rightPlayer.state === 'loose') {
+        rightPlayer.state = "rip";
+        gameArea.stop();
+      }   
+    }, 2000);
   }
 
   class Background {
@@ -237,9 +251,14 @@ window.onload = function () {
       preGame();
       board.state = "start duel";
     } else if (board.state === "start duel") {
-      board.state = "";
+      board.state = "theDuel";
       gameArea.startDuel();
     }
+    // if do restart control
+    //leftPlayer.lives = 3;
+    //rightPlayer.lives = 3;
+    //preGame();
+    // voltar para restart control para false
   });
 
   class Player {
@@ -255,8 +274,8 @@ window.onload = function () {
       realShot,
       hatshot,
       shouldershot,
+      realWinnerLive,
       deadshot,
-      liveshot,
       rip,
       x,
       y
@@ -283,10 +302,10 @@ window.onload = function () {
       this.imgHatShot.src = hatshot;
       this.imgShoulderShot = new Image();
       this.imgShoulderShot.src = shouldershot;
+      this.imgRealWinnerShot = new Image();
+      this.imgRealWinnerShot.src = realWinnerLive;
       this.imgDeadShot = new Image();
       this.imgDeadShot.src = deadshot;
-      this.imgLiveShot = new Image();
-      this.imgLiveShot.src = liveshot;
       this.imgRip = new Image();
       this.imgRip.src = rip;
       this.x = x;
@@ -322,7 +341,7 @@ window.onload = function () {
           gameArea.context.drawImage(this.imgDeadShot, this.x, this.y - this.imgDeadShot.height);
         
         } else if (this.state === "liveWinner") {
-          gameArea.context.drawImage(this.imgLiveShot, this.x, this.y - this.imgLiveShot.height);
+          gameArea.context.drawImage(this.imgRealWinnerShot, this.x, this.y - this.imgRealWinnerShot.height);
         
         } else if (this.state === "rip") { 
           gameArea.context.drawImage(this.imgRip, this.x, this.y - this.imgRip.height);
@@ -405,6 +424,7 @@ window.onload = function () {
 
   document.addEventListener("keydown", (e) => {
     //left player
+    //e.preventDefault(); - previde que o comportamento seja o default
     if (e.keyCode === 65 && gameArea.controller) {
       gameArea.controller = false;
       shotSoundPlay();
@@ -425,12 +445,12 @@ window.onload = function () {
         if (e.keyCode === 82) {
           gameArea.realGuns = true;
           preGame();
-          board.state = "instructions"
+          board.state = "instructions2"
         }
         if (e.keyCode === 70) {
           gameArea.realGuns = false;
           preGame();
-          board.state = "instructions"
+          board.state = "instructions2"
       }
   });
 
