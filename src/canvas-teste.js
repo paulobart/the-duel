@@ -396,7 +396,7 @@ window.onload = function () {
     "../images/real/left/left-real-idle.png",
     "../images/real/left/left-real-shot.png",
     "../images/real/left/left-real-hat-shot.png",
-    "../images/real/left/left-real-shoulder-shot.png",
+    "./images/real/left/left-real-shoulder-shot.png",
     "../images/real/left/left-real-life-shot.png",
     "../images/real/left/left-real-dead-shot.png",
     "../images/real/left/left-rip.png",
