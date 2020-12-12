@@ -16,11 +16,11 @@ window.onload = function () {
   }
 
   const bgAudio = new Audio();
-  bgAudio.src = "../audio/bg-audio2.mp3";
+  bgAudio.src = "./audio/bg-audio2.mp3";
   bgAudio.volume = 0.1;
 
   const shotSound = new Audio();
-  shotSound.src = "../audio/shot.mp3";
+  shotSound.src = "./audio/shot.mp3";
   shotSound.volume = 0.1;
 
   const gameArea = {
