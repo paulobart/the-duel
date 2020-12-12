@@ -196,7 +196,7 @@ window.onload = function () {
       gameArea.context.drawImage(this.img, this.x, this.y);
     }
   }
-  const background = new Background("../images/bg.png");
+  const background = new Background("./images/bg.png");
 
   class Board {
     constructor(theDuel, chooseGuns, instructions, instructions2, shoot, x, y) {
@@ -228,11 +228,11 @@ window.onload = function () {
     }
   }
   const board = new Board(
-    "../images/the-duel.png",
-    "../images/choose-guns.png",
-    "../images/instructions.png",
-    "../images/instructions2.png",
-    "../images/shoot-stamp.png",
+    "./images/the-duel.png",
+    "./images/choose-guns.png",
+    "./images/instructions.png",
+    "./images/instructions2.png",
+    "./images/shoot-stamp.png",
     225,
     43
   );
@@ -313,13 +313,13 @@ window.onload = function () {
       this.lives = 3;
       this.state = "idle";
       this.fullLife = new Image();
-      this.fullLife.src = "../images/left-three.png";
+      this.fullLife.src = "./images/left-three.png";
       this.halflife = new Image();
-      this.halflife.src = "../images/left-two.png";
+      this.halflife.src = "./images/left-two.png";
       this.lifeleft = new Image();
-      this.lifeleft.src = "../images/left-one.png";
+      this.lifeleft.src = "./images/left-one.png";
       this.nolife = new Image();
-      this.nolife.src = "../images/left-zero.png";
+      this.nolife.src = "./images/left-zero.png";
     }
 
   // armas reais 
@@ -386,38 +386,38 @@ window.onload = function () {
   }
 
   const leftPlayer = new Player(
-    "../images/fake/left/idle-left.png",
-    "../images/fake/left/shooting-left.png",
-    "../images/fake/left/left-lost-one-life.png",
-    "../images/fake/left/left-lost-two-life.png",
-    "../images/fake/left/lost-left-cry.png",
-    "../images/fake/left/winner-left.png",
-    "../images/fake/left/defeated-left.png",
-    "../images/real/left/left-real-idle.png",
-    "../images/real/left/left-real-shot.png",
-    "../images/real/left/left-real-hat-shot.png",
+    "./images/fake/left/idle-left.png",
+    "./images/fake/left/shooting-left.png",
+    "./images/fake/left/left-lost-one-life.png",
+    "./images/fake/left/left-lost-two-life.png",
+    "./images/fake/left/lost-left-cry.png",
+    "./images/fake/left/winner-left.png",
+    "./images/fake/left/defeated-left.png",
+    "./images/real/left/left-real-idle.png",
+    "./images/real/left/left-real-shot.png",
+    "./images/real/left/left-real-hat-shot.png",
     "./images/real/left/left-real-shoulder-shot.png",
-    "../images/real/left/left-real-life-shot.png",
-    "../images/real/left/left-real-dead-shot.png",
-    "../images/real/left/left-rip.png",
+    "./images/real/left/left-real-life-shot.png",
+    "./images/real/left/left-real-dead-shot.png",
+    "./images/real/left/left-rip.png",
     47,
     521
   );
   const rightPlayer = new Player(
-    "../images/fake/right/idle-right.png",
-    "../images/fake/right/shooting-right.png",
-    "../images/fake/right/right-lost-one-life.png",
-    "../images/fake/right/right-lost-two-life.png",
-    "../images/fake/right/lost-right-cry.png",
-    "../images/fake/right/winner-right.png",
-    "../images/fake/right/defeated-right.png",
-    "../images/real/right/right-real-idle.png",
-    "../images/real/right/right-real-shot.png",
-    "../images/real/right/right-real-hat-shot.png",
-    "../images/real/right/right-real-shoulder-shot.png",
-    "../images/real/right/right-real-life-shot.png",
-    "../images/real/right/right-real-dead-shot.png",
-    "../images/real/right/right-rip.png",
+    "./images/fake/right/idle-right.png",
+    "./images/fake/right/shooting-right.png",
+    "./images/fake/right/right-lost-one-life.png",
+    "./images/fake/right/right-lost-two-life.png",
+    "./images/fake/right/lost-right-cry.png",
+    "./images/fake/right/winner-right.png",
+    "./images/fake/right/defeated-right.png",
+    "./images/real/right/right-real-idle.png",
+    "./images/real/right/right-real-shot.png",
+    "./images/real/right/right-real-hat-shot.png",
+    "./images/real/right/right-real-shoulder-shot.png",
+    "./images/real/right/right-real-life-shot.png",
+    "./images/real/right/right-real-dead-shot.png",
+    "./images/real/right/right-rip.png",
     590,
     521
   );
