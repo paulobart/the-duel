@@ -23,6 +23,10 @@ window.onload = function () {
   shotSound.src = "./audio/shot.mp3";
   shotSound.volume = 0.1;
 
+  const ouchSound = new Audio();
+  ouchSound.src = "./audio/hurt.mp3"
+  ouchSound.volume = 1;
+
   const gameArea = {
     showtext: false,
     realGuns: false,
@@ -70,6 +74,13 @@ window.onload = function () {
 
   function shotSoundPlay() {
     shotSound.play();
+    
+  }
+
+  function hurtSound() {
+    setTimeout(() => {
+      ouchSound.play()
+    }, 250);
   }
 
   function gameOver() {
@@ -87,6 +98,15 @@ window.onload = function () {
       gameArea.canvas.height / 2  
     );
     //controle passa o restartcontrol para true
+    setTimeout(() => {
+      gameArea.context.fillRect(282, 394, 250, 90);
+      gameArea.context.clearRect(290, 400, 236, 78);
+      gameArea.context.textAlign = "center";
+      gameArea.context.fillStyle = "#705246";
+      gameArea.context.font = "bold 50px CFWildWestPERSONAL-Regular";
+      gameArea.context.fillText("RESTART", 408 , 458);
+      gameArea.restartControl = true;
+    }, 3000);
   }
 
   function updateGameArea() {
@@ -254,11 +274,12 @@ window.onload = function () {
       board.state = "theDuel";
       gameArea.startDuel();
     }
-    // if do restart control
-    //leftPlayer.lives = 3;
-    //rightPlayer.lives = 3;
-    //preGame();
-    // voltar para restart control para false
+    if (gameArea.restartControl === true){
+      leftPlayer.lives = 3;
+      rightPlayer.lives = 3;
+      preGame();
+      gameArea.restartControl = false;
+    }
   });
 
   class Player {
@@ -431,6 +452,7 @@ window.onload = function () {
       leftPlayer.state = "shooting";
       rightPlayer.state = "loose";
       rightPlayer.lives -= 1;
+      hurtSound();
       restartGame();
     }
     // right player
@@ -440,6 +462,7 @@ window.onload = function () {
       rightPlayer.state = "shooting";
       leftPlayer.state = "loose";
       leftPlayer.lives -= 1;
+      hurtSound();
       restartGame();
     }
         if (e.keyCode === 82) {
