@@ -23,4 +23,4 @@ Shoot [HERE](https://paulobart.github.io/the-duel/) to play **The Duel**
 
 ## Presentation
 
-Shoot [HERE] (https://slides.com/pauloduarte/deck/live) to see my presentation!
+Shoot [HERE](https://slides.com/pauloduarte/deck/live) to see my presentation!
