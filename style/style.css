@@ -1,20 +1,88 @@
 @font-face {
-    font-family: "CFWildWestPERSONAL-Regular";
-    src: url("../fonts/CFWildWestPERSONAL-Regular.ttf");
-  }
+  font-family: "CFWildWestPERSONAL-Regular";
+  src: url("../fonts/CFWildWestPERSONAL-Regular.ttf");
+}
+
+*{
+  font-family: "CFWildWestPERSONAL-Regular";
+}
 
 body{
-    display: flex;
-    justify-content: center;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.logo {
+  width: 200px;
+  padding: 20px;
+  margin-left: 100px;
 }
+
+header > div{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+}
+
+#nav-bar {
+  display: flex;
+  align-items: center;
+  background-color: #986f10;  
+  height: 100px;
+  width: 100vw;
+}
+
+#nav-bar >a{
+  text-decoration: none;
+  font-size: 30px;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+
+.image-backgroung {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+  background-image: url("../images/bg-app.gif");
+  text-align: center;
+  color:#986f10;
+  background-size: cover;
+  height: 1080px;
+  width: 100%;
+  background-repeat: no-repeat;
+}
+
+.title-image {
+  text-align: center;
+  font-size: 60px;
+  font-weight: 600;
+}
+
+.subtitle-image{
+  font-weight: 100;
+  text-align: center;
+  font-size: 22px;
+}
+
 #start-button {
-    margin-top: 50px;
-   
+  margin-top: 50px;
 }
+
 #canvas {
-    border: 1px solid black;
-    margin-top: 50px;
-    
-    display: none;
+  border: 1px solid black;
+  margin-top: 50px;
+  display: none;
 }
