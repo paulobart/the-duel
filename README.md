@@ -4,7 +4,7 @@
 
 ![Start Screen](./images/startscreen.png)
 
-Shoot [HERE](https://paulobart.github.io/the-duel/)target = "_blank" to play **The Duel**
+Shoot [HERE](https://paulobart.github.io/the-duel/) to play **The Duel**
 
 ---
 
